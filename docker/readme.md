@@ -26,7 +26,7 @@
 
 **docker cli**
 
-```
+```shell
 docker run -d \
     --name nas-tools \
     --hostname nas-tools \
@@ -48,7 +48,7 @@ docker run -d \
 新建`docker-compose.yaml`文件如下，并以命令`docker-compose up -d`启动。
 
 旧版
-```
+```yaml
 version: "3"
 services:
   nas-tools:
