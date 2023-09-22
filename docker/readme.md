@@ -47,6 +47,7 @@ docker run -d \
 
 新建`docker-compose.yaml`文件如下，并以命令`docker-compose up -d`启动。
 
+旧版
 ```
 version: "3"
 services:
@@ -68,6 +69,69 @@ services:
     network_mode: bridge
     hostname: nas-tools
     container_name: nas-tools
+```
+
+新版
+```yaml
+version: "3"
+
+services:
+  emby:
+    image: nastool/nas-tools:latest
+    container_name: nastool
+    restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+    environment:
+      - UID=1026
+      - GID=100
+      - GIDLIST=100,101
+      - TZ=Asia/Shanghai
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/lib/chromium
+      - S6_SERVICES_GRACETIME=30000
+      - S6_KILL_GRACETIME=60000
+      - S6_CMD_WAIT_FOR_SERVICES_MAXTIME=0
+      - S6_SYNC_DISKS=1
+      - HOME=/nt
+      - TERM=xterm
+      - LANG=C.UTF-8
+      - NASTOOL_CONFIG=/config/config.yaml
+      - NASTOOL_AUTO_UPDATE=false
+      - NASTOOL_CN_UPDATE=true
+      - NASTOOL_VERSION=master
+      - PS1="\u@\h:\w $ "
+      - REPO_URL=https://github.com/NAStool/nas-tools.git
+      - PYPI_MIRROR=https://pypi.tuna.tsinghua.edu.cn/simple
+      - ALPINE_MIRROR=mirrors.ustc.edu.cn
+      - PUID=0
+      - PGID=0
+      - UMASK=000
+      - WORKDIR=/nas-tools
+    volumes:
+      - ./nastools/config:/config
+      - ./nastools/log:/log
+      - ./video:/video
+    ports:
+      - 3003:3000/TCP
+    network_mode: "bridge"
+    extra_hosts:
+      - "api.themoviedb.org:13.225.103.26"
+      - "api.themoviedb.org:13.35.166.108"
+      - "api.themoviedb.org:13.35.166.12"
+      - "www.themoviedb.org:13.35.166.63"
+      - "www.themoviedb.org:13.35.166.92"
+      - "www.themoviedb.org:54.192.18.100"
+      - "www.themoviedb.org:54.192.18.90"
+      - "www.themoviedb.org:99.86.199.8"
+      - "api.thetvdb.com:13.35.157.141"
+      - "image.tmdb.org:13.35.7.89"
+      - "image.tmdb.org:143.244.49.179"
+      - "image.tmdb.org:143.244.49.177"
+      - "image.tmdb.org:143.244.49.180"
+      - "image.tmdb.org:143.244.50.211"
+      - "emby.media:173.230.139.54"
 ```
 
 ## 后续如何更新
